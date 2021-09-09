@@ -112,20 +112,13 @@ class TimerVC: UIViewController {
                 // We are at the start of a cycle
                 // TODO: begin the cycle of intervals
                 currentInterval = 1
-                timer = Timer.scheduledTimer(withTimeInterval: TimeInterval((pomodoroDuration)), repeats: false, block: {_ in
-                    self.timeRemaining += 1
-                })
+                startTimer()
 
-                
             } else {
                 // We are in the middle of a cycle
                 // TODO: Resume the timer.
                 currentInterval += 1
-                timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeRemaining), repeats: false, block: {_ in
-                    self.timeRemaining -= 1
-                })
-                
-                
+                timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(runTimer), userInfo: nil, repeats: true)
             }
         }
     }
@@ -172,8 +165,6 @@ class TimerVC: UIViewController {
     
     func startTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(runTimer), userInfo: nil, repeats: true)
-        
-        
     }
     
     @objc func runTimer() {
@@ -221,6 +212,7 @@ class TimerVC: UIViewController {
         } else {
             // If all intervals are complete, reset all.
             // TODO: Post Notification
+            NotificationCenter.default.post(Notification(name: Notification.Name("DidFinishCycle")))
             resetAll()
         }
     }

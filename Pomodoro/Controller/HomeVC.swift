@@ -39,7 +39,7 @@ class HomeVC: UIViewController {
     
     deinit {
         //TODO: Remove observers
-        
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -51,13 +51,16 @@ class HomeVC: UIViewController {
         startBtn.addTarget(self, action: #selector(openTimer), for: .touchUpInside)
         
         //TODO: Add observers
+        NotificationCenter.default.addObserver(self, selector: #selector(receivedNotification(_:)), name: Notification.Name("DidFinishCycle"), object: nil)
     }
     
     //MARK: Notifications
 
     @objc func receivedNotification(_ notification:Notification) {
         // TODO: Update value of completed cycles
+        completedCycles += 1
         // TODO: Update message label
+        messageLabel.text = "Completed Cycles: \(completedCycles)"
     }
     
     //MARK: Navigation
